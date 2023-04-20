@@ -1,12 +1,13 @@
 //模板下载地址
 exports.config = {
-  "vue3":{
-    url:"kaygod/vue3-demo",
-    bootstrap:"npm run serve"
+  'vue-template': {
+    url: 'Awxm/vue-template',
+    bootstrap: 'yarn serve',
+    install: 'yarn install'
   },
-  "vue":{
-    url:"kaygod/vue_demo",
-    bootstrap:"yarn serve",
-    install:"yarn install"
+  'node-sequelize': {
+    url: 'Awxm/node-sequelize',
+    bootstrap: 'yarn serve',
+    install: 'yarn install'
   }
-}
+};

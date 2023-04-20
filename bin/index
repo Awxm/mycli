@@ -1,23 +1,26 @@
 #! /usr/bin/env node
+
 const { program } = require('commander');
 
 program.version('1.0.0');
 
 //创建新项目
-program.command("create <app-name>")
-.description("创建一个新项目")
-.option('-t, --template <template-name>','选择一个模板下载')
-.action((appName,options)=>{
-    require("./actions/create")(appName,options);
-})
+program;
+program
+  .command('create <name>')
+  .description('创建一个新项目')
+  .option('-t, --template <template>', '选择一个模板下载')
+  .action((appName, options) => {
+    require('./command/create')(appName, options);
+  });
 
 //创建新页面
-program.command("newpage <page-name>")
-.description("创建一个新页面")
-.action((pageName)=>{
-    require("./actions/newpage")(pageName);
-})
-
+program
+  .command('page <name>')
+  .description('创建一个新页面')
+  .option('-t, --type <type>', '选择一个类型')
+  .action((pageName) => {
+    require('./command/page')(pageName);
+  });
 
 program.parse(process.argv);
-
