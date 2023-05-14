@@ -5,7 +5,6 @@ const { program } = require('commander');
 program.version(require('../package').version);
 
 //创建新项目
-program;
 program
   .command('create <name>')
   .description('创建一个新项目')
@@ -23,4 +22,11 @@ program
     require('./command/page')(pageName);
   });
 
+// 创建新路由模块并修改index 同时命名一个文件夹并加入模块
+program
+  .command('router <name>')
+  .description('创建一个新模块')
+  .action((routerName, options) => {
+    require('./command/router')(routerName, options);
+  });
 program.parse(process.argv);

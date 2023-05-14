@@ -1,21 +1,21 @@
 <template>
-  <div />
+  <div></div>
 </template>
 
 <script>
-export default {
-  name: '{{name}}',
-  components: {},
-  filters: {},
-  props: {},
-  data() {
-    return {};
-  },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {},
-};
+  export default {
+    name: '{{name}}',
+    components: {},
+    filters: {},
+    props: {},
+    data() {
+      return {};
+    },
+    computed: {},
+    watch: {},
+    created() {},
+    mounted() {},
+    methods: {}
+  };
 </script>
 <style lang="scss" scoped></style>
