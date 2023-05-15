@@ -18,28 +18,37 @@ async function newRouter(routerName) {
       }
     ];
     const { title } = await inquirer.prompt(prompList);
-    await createTemplateFile(routerName);
-    await createRouterFile(routerName, title);
+    await createTemplateFile(routerName, title);
+    await createRouterFile(routerName);
   } catch (error) {
     console.log('\n请在项目根路径下执行此命令!\n');
     throw error;
   }
 }
 
-const createTemplateFile = async (name) => {
+const createTemplateFile = async (name, title) => {
   // 读取文件
   let templateContent = await fse.readFile(path.join(__dirname, `../template/vue/index`));
   templateContent = templateContent.toString();
+
   const result = Mustache.render(templateContent, { name: uppercaseName(name) });
+  // 写入modules name.js
+  await fse.writeFile(path.join(`./src/router/modules/${name}.js`), routerMap(name, uppercaseName(name), title));
   //开始创建文件
-  await fse.writeFile(path.join(`./src/views/${name}/index.vue`), result);
+  const fPath = `./src/views/${name}`;
+  await fse.ensureDir(path.join(fPath));
+  await fse.writeFile(path.join(`${fPath}/index.vue`), result);
   console.log('\n模块创建成功!\n');
 };
 
-const createRouterFile = async (name, title) => {
-  // 创建一个router文件写入modules目录中
-  await fse.writeFile(path.join(`./src/router/modules/${name}.js`), routerMap(name, uppercaseName(name), title));
-  // 修改router index中的方法
+const createRouterFile = async (name) => {
+  const filename = path.join(`./src/router/sort/index.json`);
+  let sortJson = await fse.readFile(filename);
+  sortJson = JSON.parse(sortJson.toString());
+  sortJson.data.push(name);
+  sortJson = { sortJson };
+  sortJson = JSON.stringify(sortJson, null, '\t');
+  await fse.writeFile(filename, sortJson);
 };
 // 名字大小写转换
 function uppercaseName(name) {
