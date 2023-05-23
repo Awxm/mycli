@@ -40,7 +40,7 @@ const createTemplateFile = async (name, template) => {
   let dialogContent = await fse.readFile(path.join(__dirname, `../template/dialog/index`));
   templateContent = templateContent.toString();
   dialogContent = dialogContent.toString();
-  const result = Mustache.render(templateContent, { name: uppercaseName(name), vueName: uppercaseName(name) });
+  const result = Mustache.render(templateContent, { name, vueName: uppercaseName(name) });
   const dialogResult = Mustache.render(dialogContent, { name, vueName: uppercaseName(name) });
   //开始创建文件
   const fPath = `./src/views/${name}`;
@@ -59,7 +59,7 @@ const createRouterFile = async (name, title) => {
   // 写入modules name.js
   sortJson = JSON.parse(sortJson.toString());
   sortJson.data.push(name);
-  sortJson = { sortJson };
+  sortJson = { data: sortJson.data };
   sortJson = JSON.stringify(sortJson, null, '\t');
   // 插入路由文件
   await fse.writeFile(path.join(`./src/router/modules/${name}.js`), routerMap(name, uppercaseName(name), title));
