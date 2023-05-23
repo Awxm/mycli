@@ -1,0 +1,112 @@
+<template>
+  <div class="app-container zh-{{ name }}">
+    <div class="zh-{{ name }}-filter">
+      <search-box
+        :keyword.sync="keyword"
+        @handleSearchClick="handleSearchClick({{ name }}List)"
+        @handleClearInput="handleClearInput({{ name }}List)"
+      />
+      <el-button size="small" type="primary" @click="handleDialogCreateClick">按钮</el-button>
+    </div>
+    <div class="zh-{{ name }}-table">
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        style="width: 100%"
+        :header-cell-style="{ background: '#F5F6F8', color: '#191D30' }"
+      >
+        <el-table-column prop="name" label="名称" />
+        <el-table-column fixed="right" label="操作" width="100">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleDialogEditClick(scope.row)">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <pagination
+      :request="{{ name }}List"
+      :page.sync="pagination.page"
+      :pageSize.sync="pagination.pageSize"
+      :total="total"
+    />
+    <{{ name }}-dialog :dialog.sync="dialog" :formData.sync="formData" :title="title"
+    @handleSubmitClick="handleDialogSubmitClick" />
+  </div>
+</template>
+
+<script>
+  import search from '@c/SearchBox/search';
+  import page from '@/static/mixin/page';
+  import {{vueName}}Dialog from './components/{{name}}Dialog';
+  export default {
+    name: '{{vueName}}',
+    components: { {{vueName}}Dialog },
+    filters: {},
+    mixins: [page, search],
+    props: {},
+    data() {
+      return {
+        tableData: [],
+        // 弹窗
+        dialog: false,
+        dialogType: null,
+        formData: null,
+        title: null,
+        // loading
+        loading: true,
+        time: null
+      };
+    },
+    computed: {},
+    watch: {},
+    created() {},
+    mounted() {
+      this.{{name}}List();
+    },
+    methods: {
+      {{name}}List() {
+        this.loading = true;
+        this.$post(this.urls.{{name}}.list, { ...this.pagination, keyword: this.keyword }).then(({ data, total }) => {
+          if (this.time) clearTimeout(this.time);
+          this.time = setTimeout(() => {
+            this.tableData = data;
+            this.total = total;
+            this.loading = false;
+          }, 500);
+        });
+      },
+      // 弹窗事件
+      handleDialogCreateClick() {
+        this.dialog = true;
+        this.dialogType = 'create';
+        this.title = '创建';
+      },
+      handleDialogEditClick(row) {
+        this.dialog = true;
+        this.formData = row;
+        this.dialogType = 'edit';
+        this.title = '编辑';
+      },
+      handleDialogSubmitClick(value) {
+        const { address, contacts, name, {{name}}Id, phone, uscc } = value;
+        this.$post(this.urls.{{name}}.save, { address, contacts, name, {{name}}Id, phone, uscc }).then(() => {
+          this.$message.success(this.dialogType === 'create' ? '创建成功' : '更新成功');
+          this.{{name}}List();
+        });
+      }
+    }
+  };
+</script>
+<style lang="scss" scoped>
+  .zh-{{name}} {
+    &-filter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-table {
+      margin: 20px 0;
+    }
+  }
+</style>

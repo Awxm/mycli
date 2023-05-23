@@ -11,3 +11,5 @@ exports.config = {
     install: 'yarn install'
   }
 };
+//模板下载地址
+exports.routerConfig = ['zh', 'ms'];
