@@ -22,11 +22,18 @@ program
     require('./command/page')(pageName);
   });
 
-// 创建新路由模块并修改index 同时命名一个文件夹并加入模块
+// 创建新路由模块并修改index 同时命名一个文件夹并加入模块prettierrc
 program
   .command('router <name>')
   .description('创建一个新模块')
   .action((routerName, options) => {
     require('./command/router')(routerName, options);
+  });
+// 创建prettierrc
+program
+  .command('prettierrc')
+  .description('创建prettierrc')
+  .action(() => {
+    require('./command/prettierrc')();
   });
 program.parse(process.argv);
