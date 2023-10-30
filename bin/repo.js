@@ -14,6 +14,11 @@ exports.config = {
     url: 'Awxm/vue2-vite',
     bootstrap: 'yarn serve',
     install: 'yarn install'
+  },
+  'vue-mobile-vite': {
+    url: 'Awxm/vue-mobile-vite',
+    bootstrap: 'yarn dev',
+    install: 'yarn install'
   }
 };
 //模板下载地址
