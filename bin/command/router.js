@@ -40,7 +40,10 @@ const createTemplateFile = async (name, template) => {
   let dialogContent = await fse.readFile(path.join(__dirname, `../template/dialog/index`));
   templateContent = templateContent.toString();
   dialogContent = dialogContent.toString();
-  const result = Mustache.render(templateContent, { name, vueName: uppercaseName(name) });
+  const vueName = uppercaseName(convertToCamelCase(name));
+  const functionName = convertToCamelCase(name);
+  const mustacheData = { name, vueName, functionName };
+  const result = Mustache.render(templateContent, mustacheData);
   const dialogResult = Mustache.render(dialogContent, { name, vueName: uppercaseName(name) });
   //开始创建文件
   const fPath = `./src/views/${name}`;
@@ -49,7 +52,7 @@ const createTemplateFile = async (name, template) => {
   await fse.ensureDir(path.join(fPath));
   await fse.ensureDir(path.join(temPath));
   await fse.writeFile(path.join(`${fPath}/index.vue`), result);
-  await fse.writeFile(path.join(`${temPath}/${name}Dialog.vue`), dialogResult);
+  await fse.writeFile(path.join(`${temPath}/${vueName}Dialog.vue`), dialogResult);
   console.log('\n模块创建成功!\n');
 };
 
@@ -62,13 +65,21 @@ const createRouterFile = async (name, title) => {
   sortJson = { data: sortJson.data };
   sortJson = JSON.stringify(sortJson, null, '\t');
   // 插入路由文件
-  await fse.writeFile(path.join(`./src/router/modules/${name}.js`), routerMap(name, uppercaseName(name), title));
+  await fse.writeFile(
+    path.join(`./src/router/modules/${name}.js`),
+    routerMap(name, uppercaseName(convertToCamelCase(name)), title)
+  );
   // 写入路由脚本
   await fse.writeFile(filename, sortJson);
 };
+
+// 下划线转换
+function convertToCamelCase(str) {
+  return str.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+}
 // 名字大小写转换
-function uppercaseName(name) {
-  return name.slice(0, 1).toUpperCase() + name.slice(1).toLowerCase();
+function uppercaseName(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 module.exports = newRouter;

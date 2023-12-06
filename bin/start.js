@@ -3,7 +3,6 @@ const { config } = require('./repo');
 
 const installLib = (path, template) => {
   const install_command = config[template].install || 'npm i'; //安装依赖的命令
-
   return new Promise((resolve, reject) => {
     const workerProcess = exec(
       install_command,

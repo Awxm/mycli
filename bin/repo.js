@@ -22,4 +22,4 @@ exports.config = {
   }
 };
 //模板下载地址
-exports.routerConfig = ['zh', 'ms'];
+exports.routerConfig = ['ms', 'zh'];

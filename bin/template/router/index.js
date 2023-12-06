@@ -1,6 +1,5 @@
 exports.routerMap = (name, uppercaseName, title) => {
-  return `const ${name} = () => import('@v/${name}');
-const lists = [
+  return `export default [
   {
     path: '/${name}',
     redirect: '/${name}/index',
@@ -11,14 +10,13 @@ const lists = [
       {
         path: 'index',
         name: '${uppercaseName}',
-        component: ${name},
+        component: () => import('@v/${name}/index.vue'),
         meta: {
           title: '${title}',
         },
       },
     ],
   },
-];
-export default lists;
+];;
 `;
 };
